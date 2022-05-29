@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="200"
+   height="300"
+   viewBox="0 0 52.916665 79.375"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   sodipodi:docname="img-game.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.3228492"
+     inkscape:cx="175.757"
+     inkscape:cy="157.99231"
+     inkscape:window-width="1360"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Шар 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#f4d7d7;fill-opacity:1;stroke:none;stroke-width:0.7"
+       id="rect1238"
+       width="52.802692"
+       height="79.204041"
+       x="0"
+       y="0.2000102" />
+    <rect
+       style="fill:#e7ecf3;stroke:#aec9e4;stroke-width:0.7"
+       id="rect184"
+       width="34.601765"
+       height="44.202255"
+       x="9.20047"
+       y="20.00102" />
+    <rect
+       style="fill:#e7ecf3;stroke:#aec9e4;stroke-width:0.7"
+       id="rect186"
+       width="8.4004288"
+       height="6.0003061"
+       x="12.000612"
+       y="23.601204" />
+    <rect
+       style="fill:#e7ecf3;stroke:#aec9e4;stroke-width:0.7"
+       id="rect188"
+       width="7.6003881"
+       height="6.4003263"
+       x="24.601254"
+       y="23.601204" />
+    <rect
+       style="fill:#e7ecf3;stroke:#aec9e4;stroke-width:0.7"
+       id="rect190"
+       width="11.600592"
+       height="4.6002345"
+       x="16.000816"
+       y="36.401855" />
+    <rect
+       style="fill:#e7ecf3;stroke:#aec9e4;stroke-width:0.7"
+       id="rect192"
+       width="9.0004587"
+       height="8.0004082"
+       x="15.800807"
+       y="49.80254" />
+    <rect
+       style="fill:#e7ecf3;stroke:#aec9e4;stroke-width:0.7"
+       id="rect194"
+       width="4.6002345"
+       height="7.6003881"
+       x="33.601715"
+       y="52.20266" />
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-weight:bold;font-size:7.8483px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';fill:#e7ecf3;stroke:#aec9e4;stroke-width:1.11236"
+       x="8.4559937"
+       y="14.648801"
+       id="text250"
+       transform="scale(0.90927384,1.0997787)"><tspan
+         sodipodi:role="line"
+         id="tspan248"
+         x="8.4559937"
+         y="14.648801"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.8483px;font-family:'MS UI Gothic';-inkscape-font-specification:'MS UI Gothic';fill:#000080;fill-opacity:1;stroke:none;stroke-width:1.11236">5 у ряд</tspan></text>
+  </g>
+</svg>

@@ -1,8 +1,13 @@
 import "../styles/global.css";
+import { StoreProvider } from "../utils/store";
 
 function App({ Component, pageProps }) {
   //console.log("App is running");
-  return <Component {...pageProps} />;
+  return (
+    <StoreProvider>
+      <Component {...pageProps} />
+    </StoreProvider>
+  );
 }
 
 // Only uncomment this method if you have blocking data requirements for

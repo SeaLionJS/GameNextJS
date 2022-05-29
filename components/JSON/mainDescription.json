@@ -1,0 +1,20 @@
+[
+    {
+        "name":"5 у ряд (гра)",
+        "description": "Сама гра. Досить проста, але дозволяє демонструвати можливості",
+        "image": "/img-game.svg",
+        "link": "/fiveinrow"
+    },
+    {
+        "name":"Блог",
+        "description": "Навчальні матеріали не знаю про що",
+        "image": "/img-blog.svg",
+        "link": "/blog"
+    },
+    {
+        "name":"Про проєкт",
+        "description": "Дещо про історію цього проєкту",
+        "image": "/img-about.svg",
+        "link": "/about"
+    }
+]
