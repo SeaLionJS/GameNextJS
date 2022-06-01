@@ -2,8 +2,10 @@ import { createContext, useReducer } from "react";
 
 export const Store = createContext();
 const initialState = {
-  darkMode: true,
+  darkMode: false,
 };
+
+console.log(initialState);
 
 function reducer(state, action) {
   switch (action.type) {

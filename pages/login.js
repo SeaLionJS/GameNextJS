@@ -4,22 +4,30 @@ import MainLayout from "../components/MainLayout";
 import NextLink from "next/link";
 
 import { List, ListItem } from "@mui/material";
+import { useForm } from "react-hook-form";
 
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => console.log(data);
+  console.log(watch("example")); // watch input value by passing the name of it
   return (
     <MainLayout>
-      <div>Welcome to game site!</div>
-      <List sx={{ width: "100%", maxWidth: 200 }}>
-        <ListItem>
-          <NextLink href="/fiveinrow">П'ять у ряд</NextLink>
-        </ListItem>
-        <ListItem>
-          <NextLink href="/blog">Блог</NextLink>
-        </ListItem>
-        <ListItem>
-          <NextLink href="/about">Про проєкт</NextLink>
-        </ListItem>
-      </List>
+      /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* register your input into the hook by invoking the "register" function */}
+        <input defaultValue="test" {...register("example")} />
+        {/* include validation with required or other standard HTML validation rules */}
+        <input {...register("exampleRequired", { required: true })} />
+        {/* errors will return when field validation fails  */}
+        {errors.exampleRequired && <span>This field is required</span>}
+
+        <input type="submit" />
+      </form>
     </MainLayout>
   );
 }

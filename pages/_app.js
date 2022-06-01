@@ -1,12 +1,15 @@
 import "../styles/global.css";
 import { StoreProvider } from "../utils/store";
+import { SnackbarProvider } from "notistack";
 
 function App({ Component, pageProps }) {
   //console.log("App is running");
   return (
-    <StoreProvider>
-      <Component {...pageProps} />
-    </StoreProvider>
+    <SnackbarProvider maxSnack={3}>
+      <StoreProvider>
+        <Component {...pageProps} />
+      </StoreProvider>
+    </SnackbarProvider>
   );
 }
 

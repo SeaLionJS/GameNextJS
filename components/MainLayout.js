@@ -7,22 +7,57 @@ import {
   Toolbar,
   Link,
   Box,
+  Menu,
+  Button,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
+
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import NextLink from "next/link";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { darkTheme as dark, lightTheme as light } from "./themes";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import { Store } from "../utils/store";
+import Storage from "../utils/localStorage";
 
 export default function MainLayout({ children, title, description }) {
-  const [selectedTheme, setSelectedTheme] = useState("light");
+  const { state, dispatch } = useContext(Store);
+  const { darkMode } = state;
+
+  useEffect(() => {
+    const darkModeStorage = Storage.getDarkMode();
+    dispatch({ type: darkModeStorage ? "DARK_MODE_ON" : "DARK_MODE_OFF" });
+  }, []);
 
   const toggleTheme = () => {
-    setSelectedTheme(selectedTheme === "light" ? "dark" : "light");
+    console.log(state, darkMode);
+    Storage.setDarkMode(!darkMode);
+    dispatch({ type: darkMode ? "DARK_MODE_OFF" : "DARK_MODE_ON" });
   };
 
   const router = useRouter();
+  const isUserConfirmed = false;
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleShowMenu = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleMenu = (path) => {
+    router.push(path);
+  };
 
   return (
     <>
@@ -30,16 +65,57 @@ export default function MainLayout({ children, title, description }) {
         <title>{title ? `${title}` : "Game portal"}</title>
         {description && <meta name="description" content={description} />}
       </Head>
-      <ThemeProvider theme={selectedTheme === "light" ? light : dark}>
+      <ThemeProvider theme={darkMode ? dark : light}>
         <CssBaseline />
         <AppBar position="static">
           <Toolbar>
             <div>
               Темний режим:
-              <Switch
-                checked={selectedTheme === "dark"}
-                onChange={toggleTheme}
-              ></Switch>
+              <Switch checked={darkMode} onChange={toggleTheme}></Switch>
+            </div>
+            <div style={{ position: "absolute", right: 14, top: 14 }}>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleShowMenu}
+              >
+                Меню
+              </Button>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleCloseMenu}
+              >
+                {isUserConfirmed ? (
+                  <MenuItem onClick={() => handleMenu("/logout")}>
+                    <ListItemIcon>
+                      <LogoutIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Вийти</ListItemText>
+                  </MenuItem>
+                ) : (
+                  [
+                    <MenuItem
+                      onClick={() => handleMenu("/login")}
+                      key="login-key"
+                    >
+                      <ListItemIcon>
+                        <LoginIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>Увійти</ListItemText>
+                    </MenuItem>,
+                    <MenuItem
+                      onClick={() => handleMenu("/register")}
+                      key="register-key"
+                    >
+                      <ListItemIcon>
+                        <AppRegistrationIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>Регістрація</ListItemText>
+                    </MenuItem>,
+                  ]
+                )}
+              </Menu>
             </div>
           </Toolbar>
         </AppBar>
