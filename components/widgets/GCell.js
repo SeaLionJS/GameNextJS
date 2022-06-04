@@ -5,8 +5,17 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { Store } from "../../utils/store";
 import { useContext } from "react";
 
-export default function GCell({ figure, x, y }) {
+export default function GCell({ figure, x, y, active }) {
   //cross, circle
+
+  let act = false;
+
+  for (let i = 0; i < active.length; i++) {
+    if (active[i].x * 1 == x * 1 && active[i].y * 1 == y * 1) {
+      act = true;
+      break;
+    }
+  }
 
   const { state } = useContext(Store);
   const { darkMode } = state;
@@ -52,7 +61,7 @@ export default function GCell({ figure, x, y }) {
     <div
       data-x={x}
       data-y={y}
-      className={classes.gcell}
+      className={act ? classes.gcellactive : classes.gcell}
       style={{
         background: darkMode
           ? "radial-gradient(rgb(59 92 126), rgb(33 63 88))"

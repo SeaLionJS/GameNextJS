@@ -3,21 +3,33 @@ import { Store } from "../../utils/store";
 import { useContext, useState } from "react";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
-import { Typography, TextField, Card, Button } from "@mui/material";
+import {
+  Typography,
+  TextField,
+  Card,
+  Button,
+  CardContent,
+  CardActions,
+} from "@mui/material";
 import classes from "../../styles/classes.module.css";
-
-// const checkTime = (time, changeTimeF, timeEndF)=>{
-//     changeTime()
-// }
+import Dialog from "./Dialog";
 
 export default function GameControl() {
   const { state, dispatch } = useContext(Store);
   const { game, darkMode } = state;
   let items = "";
-  const [time, changeTime] = useState(15);
+  const [dialogVisible, openDialog] = useState(false);
 
   const changeName = (value, player) => {
     dispatch({ type: "GAME_CHANGE_NAMES", payload: { value, player } });
+  };
+
+  const surrender = () => {
+    openDialog(false);
+    dispatch({
+      type: "GAME_FINISH",
+      payload: game.state === "player1" ? "player2" : "player1",
+    });
   };
 
   const startGame = () => {
@@ -27,17 +39,16 @@ export default function GameControl() {
     });
   };
 
-  const surrender = () => {
+  const resetGame = () => {
     dispatch({
-      type: "GAME_FINISH",
-      payload: { winner: game.state === "player1" ? "player2" : "player1" },
+      type: "GAME_RESET",
     });
   };
 
   const draw = () => {
     dispatch({
       type: "GAME_FINISH",
-      payload: { winner: "draw" },
+      payload: "draw",
     });
   };
 
@@ -52,7 +63,7 @@ export default function GameControl() {
             label="Гравець 1"
             variant="outlined"
             size="small"
-            sx={{ margin: 1 }}
+            sx={{ margin: 1, width: 150 }}
           />
           <div style={{ paddingTop: 14 }}>
             <LocalHospitalIcon fontSize="small" />
@@ -69,7 +80,7 @@ export default function GameControl() {
             label="Гравець 2"
             variant="outlined"
             size="small"
-            sx={{ margin: 1 }}
+            sx={{ margin: 1, width: 150 }}
           />
           <div style={{ padding: 10 }}>
             <Button variant="outlined" size="medium" onClick={startGame}>
@@ -86,12 +97,9 @@ export default function GameControl() {
           sx={{ display: "flex", flexWrap: "wrap" }}
           className={classes.gamecontrol}
         >
-          <Button variant="outlined" size="small">
-            Нічия
-          </Button>
           <div
             className={
-              game.state === "player2"
+              game.state === "player1"
                 ? classes.activeplayer
                 : classes.inactiveplayer
             }
@@ -106,7 +114,7 @@ export default function GameControl() {
           </div>
           <div
             className={
-              game.state === "player1"
+              game.state === "player2"
                 ? classes.activeplayer
                 : classes.inactiveplayer
             }
@@ -114,14 +122,54 @@ export default function GameControl() {
             <ExpandCircleDownIcon fontSize="meduim" />
             {game.player2}
           </div>
-          <Button variant="outlined" size="small">
-            Здатися
-          </Button>
+          <Typography variant="h6">{`Залишилось ${game.time} секунд`}</Typography>
+          <div>
+            <Button
+              variant="outlined"
+              size="small"
+              sx={{ margin: 0.2 }}
+              onClick={draw}
+            >
+              Нічия
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              sx={{ margin: 0.2 }}
+              onClick={() => openDialog(true)}
+            >
+              Здатися
+            </Button>
+          </div>
+          <Dialog
+            visible={dialogVisible}
+            onAgree={surrender}
+            onCancel={() => openDialog(false)}
+          />
         </Card>
       );
       break;
     case "end":
-      items = `Переможець ${game.winner}`;
+      let text = `Переможець ${
+        game.winner === "player1" ? game.player1 : game.player2
+      } `;
+      if (game.winner == "draw") text = "Гра не виявила переможця! ";
+      items = (
+        <Card>
+          <div style={{ padding: 5 }}>
+            <span>{text}</span>
+            <Button
+              variant="outlined"
+              size="small"
+              sx={{ margin: 0.2 }}
+              onClick={resetGame}
+            >
+              Повернутися
+            </Button>
+          </div>
+        </Card>
+      );
+
       break;
     default:
       items = "Невідомий стан!";

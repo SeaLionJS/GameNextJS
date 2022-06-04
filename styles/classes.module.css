@@ -17,6 +17,13 @@
 
 }
 
+.gcellactive{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 2px solid #a11111;
+}
+
 .gamecontrol{
     padding: 5px;
 }
@@ -48,7 +55,7 @@
 }
 
 .activeplayer{
-    border: 2px solid blue;
+    border: 2px solid rgb(216, 13, 13);
     border-radius: 5px;
     margin: 3px;
 }

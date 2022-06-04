@@ -4,10 +4,11 @@ export const Store = createContext();
 const initialState = {
   darkMode: false,
   game: {
-    player1: "Світло",
-    player2: "Темрява",
+    player1: "Сині",
+    player2: "Зелені",
     winner: 0,
     state: "start", //player1, player2, end
+    time: 15,
   },
 };
 
@@ -20,10 +21,14 @@ function reducer(state, action) {
     case "DARK_MODE_OFF":
       return { ...state, darkMode: false };
     case "GAME_MAKE_STEP":
-      return { ...state, game: { ...state.game, state: action.payload } };
+      return {
+        ...state,
+        game: { ...state.game, state: action.payload, time: 15 },
+      };
     case "GAME_FINISH":
       return {
         ...state,
+
         game: { ...state.game, state: "end", winner: action.payload },
       };
     case "GAME_START":
@@ -32,6 +37,22 @@ function reducer(state, action) {
         game: {
           ...state.game,
           state: action.payload.firstStep ? "player2" : "player1",
+        },
+      };
+    case "GAME_SET_TIME":
+      return {
+        ...state,
+        game: {
+          ...state.game,
+          time: action.payload,
+        },
+      };
+    case "GAME_RESET":
+      return {
+        ...state,
+        game: {
+          ...state.game,
+          state: "start",
         },
       };
     case "GAME_CHANGE_NAMES":

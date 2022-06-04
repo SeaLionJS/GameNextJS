@@ -1,22 +1,37 @@
+import { ControlPointOutlined } from "@mui/icons-material";
+
 let field = [];
 let size = 8;
 let firstPlayer = true;
+let gameStarted = false;
+
+let time = 15;
+let callback = null;
+
+setInterval(() => {
+  if (!gameStarted) return;
+  if (time > 0) {
+    --time;
+    if (callback) callback(time);
+  }
+}, 1000);
 
 function checkRule(x, y, dx, dy) {
   let acc = [];
   let fig = 0;
 
-  for (let i = y; i < size + y; i + dy) {
-    for (let j = x; j < size + x; j + dx) {
-      if (j < 0 || j >= size || i < 0 || i >= size) continue;
+  for (let i = 0; i < size; i++) {
+    let posY = y + dy * i;
+    let posX = x + dx * i;
 
-      if (fig > 0 && fig == field[i][j]) {
-        acc.push({ x: j, y: i, fig });
-        if (acc.length >= 5) return acc;
-      } else {
-        fig = field[i][j];
-        acc = [{ x: j, y: i, fig }];
-      }
+    if (posX < 0 || posX >= size || posY < 0 || posY >= size) continue;
+
+    if (fig > 0 && fig == field[posY][posX]) {
+      acc.push({ x: posX, y: posY, fig });
+      if (acc.length >= 5) return acc;
+    } else {
+      fig = field[posY][posX];
+      acc = [{ x: posX, y: posY, fig }];
     }
   }
 
@@ -24,7 +39,6 @@ function checkRule(x, y, dx, dy) {
 }
 
 function clearField() {
-  firstPlayer = Boolean(Math.round(Math.random()));
   field = [];
   for (let i = 0; i < size; i++) {
     field[i] = [];
@@ -32,28 +46,57 @@ function clearField() {
       field[i][j] = 0; //((i + j) % 2) + 1;
     }
   }
+
+  console.log("field is empty");
 }
 
 export default {
   setSize(s) {
     size = s;
   },
-  resetGame(firstP) {
+  getTime() {
+    return time;
+  },
+  setTime(Time) {
+    time = Time;
+  },
+  resetGame() {
     clearField();
-    firstPlayer = firstP;
+    gameStarted = false;
+  },
+  updateGame(state, cb) {
+    if (state == "start") {
+      gameStarted = false;
+      callback = cb;
+      this.resetGame();
+      time = 15;
+      return;
+    }
+    if (state == "player1" || state == "player2") {
+      callback = cb;
+      firstPlayer = state == "player1";
+      gameStarted = true;
+      return;
+    }
+
+    if (state == "end") {
+      time = 15;
+      gameStarted = false;
+    }
   },
   setFigure(x, y) {
     if (field[y][x] == 0) {
-      field[y][x] = firstPlayer * 1 + 1;
-      //let isWinner = this.check();
-      // if (isWinner) {
-      //   return {
-      //     step: true,
-      //     state: "end",
-      //     winner: firstPlayer * 1 + 1,
-      //     cells: isWinner,
-      //   };
-      // }
+      field[y][x] = firstPlayer ? 1 : 2;
+      this.setTime(15);
+      let isWinner = this.check();
+      if (isWinner) {
+        return {
+          step: true,
+          state: "end",
+          winner: firstPlayer * 1 + 1,
+          cells: isWinner,
+        };
+      }
 
       firstPlayer = !firstPlayer;
       return { step: true, state: firstPlayer ? "player1" : "player2" };

@@ -78,6 +78,7 @@ export default function MainLayout({
               display: "flex",
               justifyContent: "space-around",
               flexWrap: "wrap",
+              maxWidth: 1000,
             }}
           >
             {additionalTool ? additionalTool : ""}
@@ -138,14 +139,16 @@ export default function MainLayout({
         </AppBar>
         <main>{children}</main>
         <Box component="footer" sx={{ backgroundColor: "background.paper" }}>
-          {router.pathname !== "/" ? (
-            <NextLink href="/" passHref>
-              <Link>Повернутися</Link>
-            </NextLink>
-          ) : (
-            ""
-          )}
-          <Typography textAlign="center">©Bohdan Onyshchenko 2022</Typography>
+          <Typography textAlign="center">
+            {router.pathname !== "/" ? (
+              <NextLink href="/" passHref>
+                <Link>Повернутися</Link>
+              </NextLink>
+            ) : (
+              ""
+            )}
+            <span>©Bohdan Onyshchenko 2022</span>
+          </Typography>
         </Box>
       </ThemeProvider>
     </>

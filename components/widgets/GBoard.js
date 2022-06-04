@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GCell from "./GCell";
 import classes from "../../styles/classes.module.css";
 import controller from "../../controllers/fiveinrow";
@@ -8,16 +8,35 @@ import { useContext } from "react";
 controller.setSize(8);
 controller.resetGame();
 
+let activeCells = [];
+
 export default function GBoard({ size = 8 }) {
   const figs = ["", "cross", "circle"];
   const field = controller.getField();
 
   const { state, dispatch } = useContext(Store);
   const { game } = state;
-  //console.log(state, game);
+  console.log("gboard state", game.state);
+  const isGameStarted = game.state === "player1" || game.state === "player2";
+  if (game.state == "start") {
+    activeCells = [];
+  }
+
+  const setTime = (time) => {
+    if (time == 0) {
+      dispatch({
+        type: "GAME_FINISH",
+        payload: game.state === "player1" ? "player2" : "player1",
+      });
+      return;
+    }
+    dispatch({ type: "GAME_SET_TIME", payload: time });
+  };
+
+  controller.updateGame(game.state, setTime);
 
   const clickHandler = (e) => {
-    if (game.state === "end" || game.state === "start") return;
+    if (!isGameStarted) return;
 
     let elem = e.target;
     let cords = { x: -1, y: -1 };
@@ -37,9 +56,18 @@ export default function GBoard({ size = 8 }) {
 
     let gameInfo = controller.setFigure(cords.x, cords.y);
     if (gameInfo.step) {
-      dispatch({ type: "GAME_MAKE_STEP", payload: gameInfo.state });
+      if (gameInfo.winner) {
+        activeCells = gameInfo.cells;
+        dispatch({
+          type: "GAME_FINISH",
+          payload: gameInfo.winner === 1 ? "player1" : "player2",
+        });
+      } else {
+        dispatch({ type: "GAME_MAKE_STEP", payload: gameInfo.state });
+      }
+      field = controller.getField();
     }
-    //console.log(cords);
+    console.log("from controller", gameInfo, field);
   };
 
   const cells = field.map((row, rowInd) => (
@@ -48,7 +76,12 @@ export default function GBoard({ size = 8 }) {
         //console.log("row map", cell);
         return (
           <td key={`c${colInd}`}>
-            <GCell figure={figs[cell]} x={colInd} y={rowInd} />
+            <GCell
+              figure={figs[cell]}
+              x={colInd}
+              y={rowInd}
+              active={activeCells}
+            />
           </td>
         );
       })}
