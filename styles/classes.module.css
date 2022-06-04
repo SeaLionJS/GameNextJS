@@ -1,6 +1,42 @@
-.g-cell{
-    background-color: antiquewhite;
+.gcontainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+}
+
+.gtable td{
     border: 1px solid black;
+}
+
+.gcell{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 2px solid transparent;
+
+}
+
+.gamecontrol{
+    padding: 5px;
+}
+
+.gamecontrol>*{
+    padding: 10px 5px 5px 5px;
+}
+
+.gcell:hover{
+    border: 2px solid rgb(28, 80, 139);
+    cursor: pointer;
+}
+
+.gtable{
+        width: 70vmin;
+        height: 70vmin;
+}
+
+.gtable,  .gtable td, .gtable th{
+    border-collapse: collapse;
 }
 
 .hoverBlock{
@@ -9,4 +45,16 @@
 
 .hoverBlock:hover{
     border: 2px solid blue;
+}
+
+.activeplayer{
+    border: 2px solid blue;
+    border-radius: 5px;
+    margin: 3px;
+}
+
+.inactiveplayer{
+    border: 2px solid rgb(187, 187, 197);
+    border-radius: 5px;
+    margin: 3px;
 }

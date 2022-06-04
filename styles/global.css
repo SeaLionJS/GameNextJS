@@ -12,6 +12,13 @@ main{
     margin: 0 auto;
 }
 
+.g-control{
+  border-radius: 5px;
+  padding: 3px;
+  margin: 3px;
+  border: 1px solid white;
+}
+
 ::-webkit-scrollbar {
     width: 10px;
   }

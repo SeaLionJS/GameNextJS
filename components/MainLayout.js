@@ -27,7 +27,12 @@ import { useContext } from "react";
 import { Store } from "../utils/store";
 import Storage from "../utils/localStorage";
 
-export default function MainLayout({ children, title, description }) {
+export default function MainLayout({
+  children,
+  title,
+  description,
+  additionalTool,
+}) {
   const { state, dispatch } = useContext(Store);
   const { darkMode } = state;
 
@@ -67,13 +72,16 @@ export default function MainLayout({ children, title, description }) {
       </Head>
       <ThemeProvider theme={darkMode ? dark : light}>
         <CssBaseline />
-        <AppBar position="static">
-          <Toolbar>
+        <AppBar position="static" sx={{ padding: 1 }}>
+          <Toolbar
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              flexWrap: "wrap",
+            }}
+          >
+            {additionalTool ? additionalTool : ""}
             <div>
-              Темний режим:
-              <Switch checked={darkMode} onChange={toggleTheme}></Switch>
-            </div>
-            <div style={{ position: "absolute", right: 14, top: 14 }}>
               <Button
                 variant="contained"
                 color="success"
@@ -95,6 +103,15 @@ export default function MainLayout({ children, title, description }) {
                   </MenuItem>
                 ) : (
                   [
+                    <MenuItem key="theme-key">
+                      <ListItemText>
+                        Темний режим:
+                        <Switch
+                          checked={darkMode}
+                          onChange={toggleTheme}
+                        ></Switch>
+                      </ListItemText>
+                    </MenuItem>,
                     <MenuItem
                       onClick={() => handleMenu("/login")}
                       key="login-key"
