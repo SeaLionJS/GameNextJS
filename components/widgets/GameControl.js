@@ -3,14 +3,7 @@ import { Store } from "../../utils/store";
 import { useContext, useState } from "react";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
-import {
-  Typography,
-  TextField,
-  Card,
-  Button,
-  CardContent,
-  CardActions,
-} from "@mui/material";
+import { Typography, TextField, Grid, Button, Card } from "@mui/material";
 import classes from "../../styles/classes.module.css";
 import Dialog from "./Dialog";
 
@@ -55,38 +48,55 @@ export default function GameControl() {
   switch (game.state) {
     case "start":
       items = (
-        <Card sx={{ display: "flex", flexWrap: "wrap" }}>
-          <TextField
-            onChange={(e) => changeName(e.target.value, "player1")}
-            id="player1"
-            value={game.player1}
-            label="Гравець 1"
-            variant="outlined"
-            size="small"
-            sx={{ margin: 1, width: 150 }}
-          />
-          <div style={{ paddingTop: 14 }}>
-            <LocalHospitalIcon fontSize="small" />
-            <Typography component="span" variant="h5" sx={{ padingTop: 10 }}>
-              VS
-            </Typography>
-            <ExpandCircleDownIcon fontSize="small" />
-          </div>
-
-          <TextField
-            onChange={(e) => changeName(e.target.value, "player2")}
-            id="player2"
-            value={game.player2}
-            label="Гравець 2"
-            variant="outlined"
-            size="small"
-            sx={{ margin: 1, width: 150 }}
-          />
-          <div style={{ padding: 10 }}>
-            <Button variant="outlined" size="medium" onClick={startGame}>
-              Почати гру
-            </Button>
-          </div>
+        <Card>
+          <Grid
+            container
+            sx={{ maxWidth: 1000 }}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Grid item xs={12} sm={5} md={3} align="center">
+              <TextField
+                onChange={(e) => changeName(e.target.value, "player1")}
+                id="player1"
+                value={game.player1}
+                label="Гравець 1"
+                variant="outlined"
+                size="small"
+                sx={{ margin: 1 }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={2} md={3} align="center">
+              <LocalHospitalIcon fontSize="small" />
+              <Typography component="span" variant="h5" sx={{ padingTop: 10 }}>
+                VS
+              </Typography>
+              <ExpandCircleDownIcon fontSize="small" />
+            </Grid>
+            <Grid item xs={12} sm={5} md={3} align="center">
+              <TextField
+                onChange={(e) => changeName(e.target.value, "player2")}
+                id="player2"
+                value={game.player2}
+                label="Гравець 2"
+                variant="outlined"
+                size="small"
+                sx={{ margin: 1 }}
+              />
+            </Grid>
+            <Grid item xs={5} sm={6} md={2.5} align="center">
+              <div style={{ padding: 5 }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  onClick={startGame}
+                >
+                  Почати гру
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
         </Card>
       );
       break;
@@ -97,50 +107,62 @@ export default function GameControl() {
           sx={{ display: "flex", flexWrap: "wrap" }}
           className={classes.gamecontrol}
         >
-          <div
-            className={
-              game.state === "player1"
-                ? classes.activeplayer
-                : classes.inactiveplayer
-            }
+          <Grid
+            container
+            sx={{ maxWidth: 1000 }}
+            alignItems="center"
+            justifyContent="center"
           >
-            {game.player1}
-            <LocalHospitalIcon fontSize="meduim" />
-          </div>
-          <div>
-            <Typography component="div" variant="h6" sx={{ padingTop: 14 }}>
-              VS
-            </Typography>
-          </div>
-          <div
-            className={
-              game.state === "player2"
-                ? classes.activeplayer
-                : classes.inactiveplayer
-            }
-          >
-            <ExpandCircleDownIcon fontSize="meduim" />
-            {game.player2}
-          </div>
-          <Typography variant="h6">{`Залишилось ${game.time} секунд`}</Typography>
-          <div>
-            <Button
-              variant="outlined"
-              size="small"
-              sx={{ margin: 0.2 }}
-              onClick={draw}
-            >
-              Нічия
-            </Button>
-            <Button
-              variant="outlined"
-              size="small"
-              sx={{ margin: 0.2 }}
-              onClick={() => openDialog(true)}
-            >
-              Здатися
-            </Button>
-          </div>
+            <Grid item>
+              <div
+                className={
+                  game.state === "player1"
+                    ? classes.activeplayer
+                    : classes.inactiveplayer
+                }
+              >
+                {game.player1}
+                <LocalHospitalIcon fontSize="meduim" />
+              </div>
+            </Grid>
+            <Grid item>
+              <div
+                className={
+                  game.state === "player2"
+                    ? classes.activeplayer
+                    : classes.inactiveplayer
+                }
+              >
+                <ExpandCircleDownIcon fontSize="meduim" />
+                {game.player2}
+              </div>
+            </Grid>
+            <Grid item sm={12} xs={12} align="center">
+              <Typography variant="h6">{`Залишилось ${Math.floor(
+                game.time / 10
+              )}${game.time % 10} секунд`}</Typography>
+            </Grid>
+            <Grid item>
+              <div>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{ margin: 0.2 }}
+                  onClick={draw}
+                >
+                  Нічия
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{ margin: 0.2 }}
+                  onClick={() => openDialog(true)}
+                >
+                  Здатися
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
           <Dialog
             visible={dialogVisible}
             onAgree={surrender}

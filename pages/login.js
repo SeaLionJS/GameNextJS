@@ -1,33 +1,137 @@
-import React from "react";
+import {
+  Button,
+  List,
+  ListItem,
+  TextField,
+  Typography,
+  Card,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import MainLayout from "../components/MainLayout";
-
 import NextLink from "next/link";
-
-import { List, ListItem } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { Store } from "../utils/store";
+import { useContext } from "react";
+import { useRouter } from "next/router";
+import { Controller, useForm } from "react-hook-form";
+import { useSnackbar } from "notistack";
 
 export default function Login() {
+  const classes = {};
+  const { state, dispatch } = useContext(Store);
   const {
-    register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
-  console.log(watch("example")); // watch input value by passing the name of it
-  return (
-    <MainLayout>
-      /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {/* register your input into the hook by invoking the "register" function */}
-        <input defaultValue="test" {...register("example")} />
-        {/* include validation with required or other standard HTML validation rules */}
-        <input {...register("exampleRequired", { required: true })} />
-        {/* errors will return when field validation fails  */}
-        {errors.exampleRequired && <span>This field is required</span>}
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  //const { userInfo } = state;
+  const router = useRouter();
+  const { redirect } = router.query; //redirect link
+  //console.log(redirect);
 
-        <input type="submit" />
-      </form>
+  const onSubmit = async ({ email, password }) => {
+    closeSnackbar();
+    try {
+      const { data } = {}; //server request
+      dispatch({ type: "USER_LOGIN", payload: data });
+      //save state in
+      router.push(redirect || "/");
+    } catch (err) {
+      enqueueSnackbar(err);
+    }
+  };
+
+  return (
+    <MainLayout title="Логін">
+      <Card
+        sx={{
+          display: "block",
+          padding: 2,
+          width: 300,
+          margin: "10px auto",
+        }}
+      >
+        <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+          <Typography variant="h3" component="h1">
+            Вхід
+          </Typography>
+          <List>
+            <ListItem>
+              <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: true,
+                  pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                }}
+                render={({ field }) => {
+                  return (
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      id="email"
+                      label="Електронна пошта"
+                      inputProps={{ type: "email" }}
+                      error={Boolean(errors.email)}
+                      helperText={
+                        Boolean(errors.email)
+                          ? errors.email.type === "pattern"
+                            ? "Пошта не відповідає патерну"
+                            : "Потрібно ввести поштову адресу"
+                          : ""
+                      }
+                      {...field}
+                    ></TextField>
+                  );
+                }}
+              ></Controller>
+            </ListItem>
+            <ListItem>
+              <Controller
+                name="password"
+                control={control}
+                defaultValue=""
+                rules={{ required: true, minLength: 6 }}
+                render={({ field }) => (
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    id="password"
+                    label="Пароль"
+                    inputProps={{ type: "password" }}
+                    error={Boolean(errors.password)}
+                    helperText={
+                      errors.password
+                        ? errors.password.type === "minLength"
+                          ? "Довжина пароля не менше 6 символів"
+                          : "Потрібно ввести пароль"
+                        : ""
+                    }
+                    {...field}
+                  ></TextField>
+                )}
+              ></Controller>
+            </ListItem>
+            <ListItem>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                color="primary"
+              >
+                Увійти
+              </Button>
+            </ListItem>
+            <ListItem>
+              <Typography>
+                Ще не зарегіструвались?{" "}
+                <NextLink href="/register">Регістрація</NextLink>
+              </Typography>
+            </ListItem>
+          </List>
+        </form>
+      </Card>
     </MainLayout>
   );
 }

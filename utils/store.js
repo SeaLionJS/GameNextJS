@@ -10,6 +10,12 @@ const initialState = {
     state: "start", //player1, player2, end
     time: 15,
   },
+  userInfo: {
+    //data
+  },
+  connectedUserInfo: {
+    //data
+  },
 };
 
 //console.log(initialState);

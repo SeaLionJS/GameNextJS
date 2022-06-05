@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import GCell from "./GCell";
 import classes from "../../styles/classes.module.css";
-import controller from "../../controllers/fiveinrow";
+import controller from "../controllers/fiveinrow";
 import { Store } from "../../utils/store";
 import { useContext } from "react";
 
@@ -60,7 +60,7 @@ export default function GBoard({ size = 8 }) {
         activeCells = gameInfo.cells;
         dispatch({
           type: "GAME_FINISH",
-          payload: gameInfo.winner === 1 ? "player1" : "player2",
+          payload: gameInfo.winner === 1 ? "player2" : "player1",
         });
       } else {
         dispatch({ type: "GAME_MAKE_STEP", payload: gameInfo.state });

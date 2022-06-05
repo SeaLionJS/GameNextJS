@@ -76,14 +76,19 @@ export default function MainLayout({
           <Toolbar
             sx={{
               display: "flex",
-              justifyContent: "space-around",
+              justifyContent: "center",
               flexWrap: "wrap",
-              maxWidth: 1000,
+              // maxWidth: 1000,
             }}
           >
             {additionalTool ? additionalTool : ""}
             <div>
               <Button
+                sx={{
+                  position: "absolute",
+                  right: 0,
+                  top: 15,
+                }}
                 variant="contained"
                 color="success"
                 onClick={handleShowMenu}
@@ -142,12 +147,12 @@ export default function MainLayout({
           <Typography textAlign="center">
             {router.pathname !== "/" ? (
               <NextLink href="/" passHref>
-                <Link>Повернутися</Link>
+                <Link>Головна сторінка</Link>
               </NextLink>
             ) : (
               ""
             )}
-            <span>©Bohdan Onyshchenko 2022</span>
+            <span> ©Bohdan Onyshchenko 2022</span>
           </Typography>
         </Box>
       </ThemeProvider>
