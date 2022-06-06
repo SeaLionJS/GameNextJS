@@ -14,6 +14,7 @@ import { useContext } from "react";
 import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
+import fetch from "../components/controllers/fetch";
 
 export default function Login() {
   const classes = {};
@@ -26,18 +27,31 @@ export default function Login() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   //const { userInfo } = state;
   const router = useRouter();
-  const { redirect } = router.query; //redirect link
+  //const { redirect } = router.query; //redirect link
   //console.log(redirect);
 
-  const onSubmit = async ({ email, password }) => {
+  const onSubmit = async ({ email, name, surname, password, confirm }) => {
     closeSnackbar();
+    if (password !== confirm) {
+      enqueueSnackbar("Паролі не ідентичні!", { variant: "error" });
+      return;
+    }
+
     try {
-      const { data } = {}; //server request
+      const data = await fetch.postJSON("/api/register", {
+        email,
+        name,
+        surname,
+        password,
+        confirm,
+      }); //server request
+      console.log("We get from server", data.type);
       dispatch({ type: "USER_LOGIN", payload: data });
-      //save state in
-      router.push(redirect || "/");
+      //save state in...
+      //router.push("/");
     } catch (err) {
-      enqueueSnackbar(err);
+      console.log(err);
+      //enqueueSnackbar(err, { variant: "error" });
     }
   };
 
@@ -102,10 +116,10 @@ export default function Login() {
                       fullWidth
                       id="name"
                       label="Ім'я"
-                      inputProps={{ type: "email" }}
+                      inputProps={{ type: "text" }}
                       error={Boolean(errors.name)}
                       helperText={
-                        Boolean(errors.email) ? "Потрібно ввести ім'я" : ""
+                        Boolean(errors.name) ? "Потрібно ввести ім'я" : ""
                       }
                       {...field}
                     ></TextField>
@@ -115,7 +129,7 @@ export default function Login() {
             </ListItem>
             <ListItem>
               <Controller
-                name="name"
+                name="surname"
                 control={control}
                 defaultValue=""
                 rules={{
@@ -128,11 +142,9 @@ export default function Login() {
                       fullWidth
                       id="surname"
                       label="Прізвище"
-                      inputProps={{ type: "email" }}
-                      error={Boolean(errors.name)}
-                      helperText={
-                        Boolean(errors.email) ? "Потрібно ввести ім'я" : ""
-                      }
+                      inputProps={{ type: "text" }}
+                      error={Boolean(errors.surname)}
+                      helperText={"Потрібно ввести прізвище"}
                       {...field}
                     ></TextField>
                   );
@@ -167,7 +179,7 @@ export default function Login() {
             </ListItem>
             <ListItem>
               <Controller
-                name="password"
+                name="confirm"
                 control={control}
                 defaultValue=""
                 rules={{ required: true, minLength: 6 }}
@@ -175,15 +187,15 @@ export default function Login() {
                   <TextField
                     variant="outlined"
                     fullWidth
-                    id="password-conirm"
+                    id="confirm"
                     label="Підтвердити пароль"
                     inputProps={{ type: "password" }}
-                    error={Boolean(errors.password)}
+                    error={Boolean(errors.confirm)}
                     helperText={
-                      errors.password
-                        ? errors.password.type === "minLength"
+                      errors.confirm
+                        ? errors.confirm.type === "minLength"
                           ? "Довжина пароля не менше 6 символів"
-                          : "Потрібно ввести пароль"
+                          : "Потрібно підтвердити пароль"
                         : ""
                     }
                     {...field}

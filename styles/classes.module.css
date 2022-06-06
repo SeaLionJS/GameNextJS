@@ -52,6 +52,7 @@
 
 .hoverBlock:hover{
     border: 2px solid blue;
+    background-color: rgba(194, 185, 135, 0.3);
     cursor: pointer;
 }
 

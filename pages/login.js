@@ -14,6 +14,7 @@ import { useContext } from "react";
 import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
+import fetch from "../components/controllers/fetch";
 
 export default function Login() {
   const classes = {};
@@ -32,12 +33,17 @@ export default function Login() {
   const onSubmit = async ({ email, password }) => {
     closeSnackbar();
     try {
-      const { data } = {}; //server request
-      dispatch({ type: "USER_LOGIN", payload: data });
-      //save state in
-      router.push(redirect || "/");
+      const data = await fetch.postJSON("/api/login", {
+        email,
+        password,
+      }); //server request
+      console.log("Login, We get from server", data);
+      //dispatch({ type: "USER_LOGIN", payload: data });
+      //save state in...
+      //router.push("/");
     } catch (err) {
-      enqueueSnackbar(err);
+      console.log(err);
+      //enqueueSnackbar(err, { variant: "error" });
     }
   };
 
