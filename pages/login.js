@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
 import fetch from "../components/controllers/fetch";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const classes = {};
@@ -25,9 +26,7 @@ export default function Login() {
     formState: { errors },
   } = useForm();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  //const { userInfo } = state;
   const router = useRouter();
-  const { redirect } = router.query; //redirect link
   //console.log(redirect);
 
   const onSubmit = async ({ email, password }) => {
@@ -37,10 +36,12 @@ export default function Login() {
         email,
         password,
       }); //server request
-      console.log("Login, We get from server", data);
-      //dispatch({ type: "USER_LOGIN", payload: data });
-      //save state in...
-      //router.push("/");
+      if (data.status == "error") {
+        enqueueSnackbar(data.code, { variant: "error" });
+        return;
+      }
+      Cookies.set("UInfo", JSON.stringify(data));
+      router.push("/");
     } catch (err) {
       console.log(err);
       //enqueueSnackbar(err, { variant: "error" });

@@ -3,31 +3,53 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import InfoIcon from "@mui/icons-material/Info";
+import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
 
-export default function GDialog({ visible, onAgree, onCancel }) {
-  if (!visible) return "";
+import { Grid, iconClasses } from "@mui/material";
+
+export default function GDialog({
+  visible,
+  onAgree,
+  onCancel,
+  header,
+  text,
+  type,
+}) {
+  const style = { width: 120, height: 120 };
+
+  const icons = {
+    info: <InfoIcon color="info" sx={style} />,
+    error: <ErrorIcon color="error" sx={style} />,
+    warning: <WarningIcon color="warning" sx={style} />,
+  };
+
+  const icon = icons[type];
+
   return (
-    <Dialog
-      open={visible}
-      onClose={onCancel}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
-        {"Вам буде зарахована поразка"}
-      </DialogTitle>
+    <Dialog open={visible} onClose={onCancel}>
+      <DialogTitle id="alert-dialog-title">{header}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          Ви впевнені?
-        </DialogContentText>
+        <Grid container direction="row" alignItems="center" maxWidth={600}>
+          <Grid item xs={12} sm align="center">
+            {icon}
+          </Grid>
+          <Grid item xs={12} sm={8} align="justify">
+            {text}
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={onAgree}>Так</Button>
-        <Button onClick={onCancel} autoFocus>
-          Ні
-        </Button>
+        {onCancel ? (
+          <Button onClick={onCancel} autoFocus>
+            Ні
+          </Button>
+        ) : (
+          ""
+        )}
       </DialogActions>
     </Dialog>
   );

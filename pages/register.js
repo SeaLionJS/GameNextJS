@@ -14,7 +14,8 @@ import { useContext } from "react";
 import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
-import fetch from "../components/controllers/fetch";
+import Fetch from "../components/controllers/fetch";
+import GDialog from "../components/widgets/Dialog";
 
 export default function Login() {
   const classes = {};
@@ -27,8 +28,8 @@ export default function Login() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   //const { userInfo } = state;
   const router = useRouter();
-  //const { redirect } = router.query; //redirect link
-  //console.log(redirect);
+
+  const [dialogVisible, setDialog] = useState(false);
 
   const onSubmit = async ({ email, name, surname, password, confirm }) => {
     closeSnackbar();
@@ -38,20 +39,22 @@ export default function Login() {
     }
 
     try {
-      const data = await fetch.postJSON("/api/register", {
+      const data = await Fetch.postJSON("/api/register", {
         email,
         name,
         surname,
         password,
         confirm,
       }); //server request
-      console.log("We get from server", data.type);
-      dispatch({ type: "USER_LOGIN", payload: data });
-      //save state in...
-      //router.push("/");
+      //console.log("We get from server", data.type);
+      if (data.status == "error") {
+        enqueueSnackbar(data.code, { variant: "error" });
+        return;
+      } else {
+        setDialog(true);
+      }
     } catch (err) {
       console.log(err);
-      //enqueueSnackbar(err, { variant: "error" });
     }
   };
 
@@ -144,7 +147,11 @@ export default function Login() {
                       label="Прізвище"
                       inputProps={{ type: "text" }}
                       error={Boolean(errors.surname)}
-                      helperText={"Потрібно ввести прізвище"}
+                      helperText={
+                        Boolean(errors.surname)
+                          ? "Потрібно ввести прізвище"
+                          : ""
+                      }
                       {...field}
                     ></TextField>
                   );
@@ -222,6 +229,16 @@ export default function Login() {
           </List>
         </form>
       </Card>
+      <GDialog
+        visible={dialogVisible}
+        header="Регістрація успішно завершена!"
+        type="info"
+        text="Вітаємо. Регістрація успішно завершена! Тепер ви можете увійти у свій аккаунт користуватися усіми функціями!"
+        onAgree={() => {
+          setDialog(false);
+          router.push("/login");
+        }}
+      />
     </MainLayout>
   );
 }

@@ -17,6 +17,7 @@ export default async function login(req, res) {
       isAdmin: user.isAdmin,
     });
   } else {
-    res.status(401).send({ message: "invalid user or password" });
+    let code = "Невірний логін або пароль!";
+    res.status(200).send({ type: "login", status: "error", code }); //for errors
   }
 }

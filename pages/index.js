@@ -15,10 +15,13 @@ export default function Main() {
     enqueueSnackbar("This is working!", { variant: "info" });
   }, []);
   return (
-    <MainLayout>
-      <Typography component="h1" variant="h4" align="center">
-        Ласкаво просимо!
-      </Typography>
+    <MainLayout
+      additionalTool={
+        <Typography component="h1" variant="h5" align="center">
+          Ласкаво просимо на цей ігровий сайт!
+        </Typography>
+      }
+    >
       <CarouselWidget />
       <Grid container spacing={2} sx={{ marginBottom: 3 }}>
         {description.map((e, ind) => (

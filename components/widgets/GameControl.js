@@ -163,11 +163,6 @@ export default function GameControl() {
               </div>
             </Grid>
           </Grid>
-          <Dialog
-            visible={dialogVisible}
-            onAgree={surrender}
-            onCancel={() => openDialog(false)}
-          />
         </Card>
       );
       break;
@@ -198,5 +193,17 @@ export default function GameControl() {
       break;
   }
 
-  return items;
+  return (
+    <>
+      <Dialog
+        visible={dialogVisible}
+        header="Вам буде зарахована поразка"
+        type="warning"
+        text="Ви впевнені?"
+        onAgree={surrender}
+        onCancel={() => openDialog(false)}
+      />
+      {items}
+    </>
+  );
 }

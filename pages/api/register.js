@@ -2,6 +2,7 @@ import db from "../../components/backend/db";
 import bcrypt from "bcrypt";
 import User from "../../components/backend/models/User";
 import { signToken } from "../../components/backend/auth";
+import GDialog from "../../components/widgets/Dialog";
 
 export default async function register(req, res) {
   if (req.method !== "POST") {
@@ -35,7 +36,18 @@ export default async function register(req, res) {
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(401).send({ type: "registration", status: "error" }); //for errors
+    const { code } = err;
+    let errCode = "";
+    switch (code) {
+      case 11000:
+        errCode = "Запис з такою електронною поштою вже існує!";
+        break;
+      default:
+        errCode = "Невідома помилка!";
+        break;
+    }
+    res
+      .status(200)
+      .send({ type: "registration", status: "error", code: errCode }); //for errors
   }
 }

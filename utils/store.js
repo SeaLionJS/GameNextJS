@@ -10,7 +10,7 @@ const initialState = {
     state: "start", //player1, player2, end
     time: 15,
   },
-  userInfo: {
+  UInfo: {
     //data
   },
   connectedUserInfo: {
@@ -26,6 +26,8 @@ function reducer(state, action) {
       return { ...state, darkMode: true };
     case "DARK_MODE_OFF":
       return { ...state, darkMode: false };
+    case "UPDATE_USER":
+      return { ...state, UInfo: action.payload };
     case "GAME_MAKE_STEP":
       return {
         ...state,

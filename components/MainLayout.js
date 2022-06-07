@@ -26,6 +26,7 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 import { Store } from "../utils/store";
 import Storage from "../utils/localStorage";
+import Cookie from "js-cookie";
 
 export default function MainLayout({
   children,
@@ -35,9 +36,15 @@ export default function MainLayout({
 }) {
   const { state, dispatch } = useContext(Store);
   const { darkMode } = state;
+  const { UInfo } = state;
 
   useEffect(() => {
     const darkModeStorage = Storage.getDarkMode();
+    let user = Cookie.get("UInfo");
+    if (user) {
+      user = JSON.parse(user);
+      dispatch({ type: "UPDATE_USER", payload: user });
+    }
     dispatch({ type: darkModeStorage ? "DARK_MODE_ON" : "DARK_MODE_OFF" });
   }, []);
 
@@ -48,7 +55,6 @@ export default function MainLayout({
   };
 
   const router = useRouter();
-  const isUserConfirmed = false;
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -62,6 +68,10 @@ export default function MainLayout({
 
   const handleMenu = (path) => {
     router.push(path);
+  };
+
+  const handleLogout = () => {
+    dispatch({ type: "UPDATE_USER", payload: {} });
   };
 
   return (
@@ -93,44 +103,35 @@ export default function MainLayout({
                 color="success"
                 onClick={handleShowMenu}
               >
-                Меню
+                {UInfo.name ? UInfo.name : "Меню"}
               </Button>
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
               >
-                {isUserConfirmed ? (
-                  <MenuItem onClick={() => handleMenu("/logout")}>
+                <MenuItem key="theme-key">
+                  <ListItemText>
+                    Темний режим:
+                    <Switch checked={darkMode} onChange={toggleTheme}></Switch>
+                  </ListItemText>
+                </MenuItem>
+                {UInfo.name ? (
+                  <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
-                      <LogoutIcon fontSize="small" />
+                      <LoginIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Вийти</ListItemText>
                   </MenuItem>
                 ) : (
                   [
-                    <MenuItem key="theme-key">
-                      <ListItemText>
-                        Темний режим:
-                        <Switch
-                          checked={darkMode}
-                          onChange={toggleTheme}
-                        ></Switch>
-                      </ListItemText>
-                    </MenuItem>,
-                    <MenuItem
-                      onClick={() => handleMenu("/login")}
-                      key="login-key"
-                    >
+                    <MenuItem onClick={() => handleMenu("/login")} key="enter">
                       <ListItemIcon>
                         <LoginIcon fontSize="small" />
                       </ListItemIcon>
                       <ListItemText>Увійти</ListItemText>
                     </MenuItem>,
-                    <MenuItem
-                      onClick={() => handleMenu("/register")}
-                      key="register-key"
-                    >
+                    <MenuItem onClick={() => handleMenu("/register")} key="reg">
                       <ListItemIcon>
                         <AppRegistrationIcon fontSize="small" />
                       </ListItemIcon>
