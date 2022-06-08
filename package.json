@@ -29,6 +29,8 @@
     "react-chartjs-2": "^4.1.0",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.31.3",
-    "react-material-ui-carousel": "^3.4.1"
+    "react-material-ui-carousel": "^3.4.1",
+    "socket.io": "^4.5.1",
+    "socket.io-client": "^4.5.1"
   }
 }

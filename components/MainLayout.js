@@ -119,7 +119,7 @@ export default function MainLayout({
                 {UInfo.name ? (
                   <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
-                      <LoginIcon fontSize="small" />
+                      <LogoutIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Вийти</ListItemText>
                   </MenuItem>
